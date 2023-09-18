@@ -32,13 +32,7 @@ Here's how to get the project up and running on your local machine for developme
     poetry install
     ```
 
-4. Start the PostgreSQL database. If PostgreSQL is installed on your machine, you can usually start it with a command like:
-
-    ```
-    pg_ctl start
-    ```
-
-    Make sure to update the `SQLALCHEMY_DATABASE_URL` in `app/core/database.py` with your actual database connection details.
+4. Create `.env` file and fill out with values from `.env.example`
 
 5. Run the application:
 
