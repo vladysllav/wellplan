@@ -2,7 +2,9 @@ import os
 from typing import Any, Dict, List, Optional, Union
 
 from dotenv import load_dotenv
-from pydantic import AnyHttpUrl, BaseSettings, HttpUrl, PostgresDsn, field_validator
+from pydantic import AnyHttpUrl, HttpUrl, PostgresDsn, field_validator
+from pydantic_settings import BaseSettings
+from pydantic_core.core_schema import FieldValidationInfo
 
 load_dotenv()
 
@@ -42,20 +44,21 @@ class Settings(BaseSettings):
     POSTGRES_USER: str = os.getenv('POSTGRES_USER')
     POSTGRES_PASSWORD: str = os.getenv('POSTGRES_PASSWORD')
     POSTGRES_DB: str = os.getenv('POSTGRES_DB')
-    SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
+    SQLALCHEMY_DATABASE_URI: Optional[str] = None
 
     @field_validator("SQLALCHEMY_DATABASE_URI", mode='before')
     @classmethod
-    def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
+    def assemble_db_connection(cls, v: Optional[str], info: FieldValidationInfo) -> Any:
         if isinstance(v, str):
             return v
-        return PostgresDsn.build(
+        postgres_dsn = PostgresDsn.build(
             scheme="postgresql",
-            user=values.get("POSTGRES_USER"),
-            password=values.get("POSTGRES_PASSWORD"),
-            host=values.get("POSTGRES_SERVER"),
-            path=f"/{values.get('POSTGRES_DB') or ''}",
+            username=info.data.get("POSTGRES_USER"),
+            password=info.data.get("POSTGRES_PASSWORD"),
+            host=info.data.get("POSTGRES_SERVER"),
+            path=f"{info.data.get('POSTGRES_DB') or ''}",
         )
+        return str(postgres_dsn)
 
     class Config:
         case_sensitive = True
