@@ -1,8 +1,8 @@
-"""create user table
+"""Create type for user - usertypeenum
 
-Revision ID: ab95cc59ab66
+Revision ID: 088a9eec40f7
 Revises: 
-Create Date: 2023-09-19 23:05:02.606413
+Create Date: 2023-09-20 12:38:08.230968
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'ab95cc59ab66'
+revision: str = '088a9eec40f7'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,7 +27,7 @@ def upgrade() -> None:
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=True),
-    sa.Column('user_type', sa.Enum('client', 'admin', name='user_type_enum'), nullable=True),
+    sa.Column('user_type', sa.Enum('client', 'admin', 'superadmin', name='usertypeenum'), nullable=False),
     sa.Column('date_of_birth', sa.Date(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
