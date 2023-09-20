@@ -1,7 +1,7 @@
 import enum
 
-from sqlalchemy import Boolean, Column, Date, Enum, Integer, String
-
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, Date, Enum
+from sqlalchemy.sql import func
 from app.db.base_class import Base
 from app.models.base import TimestampedModel
 
