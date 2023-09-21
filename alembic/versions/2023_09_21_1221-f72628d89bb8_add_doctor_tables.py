@@ -7,13 +7,13 @@ Create Date: 2023-09-21 12:21:24.661952
 """
 from typing import Sequence, Union
 
-import sqlalchemy as sa
 
 from alembic import op
-
+import sqlalchemy as sa
 # revision identifiers, used by Alembic.
-revision: str = "f72628d89bb8"
-down_revision: Union[str, None] = "088a9eec40f7"
+revision: str = 'f72628d89bb8'
+down_revision: Union[str, None] = '088a9eec40f7'
+
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -91,4 +91,3 @@ def downgrade() -> None:
     op.drop_table("doctor")
     op.drop_index(op.f("ix_branch_id"), table_name="branch")
     op.drop_table("branch")
-    # ### end Alembic commands ###
