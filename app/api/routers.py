@@ -3,6 +3,7 @@ from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
+
 from app.api.auth import routes as auth_routes
 from app.api.deps import get_db
 from app.crud.base import CRUDBase
