@@ -16,6 +16,7 @@ api_router = APIRouter()
 api_router.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
 api_router.include_router(user_routes.router, prefix="/users", tags=["users"])
 
+
 @api_router.post("/alive")
 def alive() -> Any:
     """
