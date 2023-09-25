@@ -1,5 +1,4 @@
 from typing import Any
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -18,7 +17,8 @@ from app.schemas.doctor import (BaseBranch, BaseDoctor, BranchUpdate,
 api_router = APIRouter()
 
 api_router.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
-api_router.include_router(user_routes.router, prefix="/users", tags=["users"])
+api_router.include_router(auth_routes.router, prefix="/doctors", tags=["doctors"])
+api_router.include_router(auth_routes.router, prefix="/branches", tags=["branches"])
 
 
 @api_router.post("/alive")
