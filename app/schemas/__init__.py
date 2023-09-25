@@ -1,4 +1,4 @@
-from .user import UserLogin
+from .user import UserLogin, User, UserCreate, UserUpdate
 from .token import Token
 
 
