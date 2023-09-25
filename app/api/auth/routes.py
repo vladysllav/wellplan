@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app import schemas
@@ -18,5 +18,3 @@ def login_access_token(
     OAuth2 compatible token login, get an access token for future requests
     """
     ...
-
-
