@@ -1,17 +1,5 @@
 from typing import Any
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 
-
-from app.api.auth import routes as auth_routes
-from app.api.deps import get_db
-from app.crud.base import CRUDBase
-from app.api.users import routes as user_routes
-
-
-from app.models import Branch, Doctor
-from app.schemas.doctor import (BaseBranch, BaseDoctor, BranchUpdate,
-                                CreateBranch, CreateDoctor, DoctorUpdate)
 from fastapi import APIRouter
 from app.api.auth import routes
 
