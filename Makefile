@@ -8,7 +8,7 @@ install:
 	$(POETRY) install
 
 
-setup:
+
 	@echo "Cloning the repositories..."
 	git clone git@github.com:vladislav/wellplan.git
 	@echo "Navigating to the project directory..."
@@ -30,7 +30,7 @@ migrate:
 	$(POETRY) run alembic upgrade head
 
 
-migrate-downgrade:
+downgrade:
 	@echo "Rolling back Alembic migrations..."
 	$(POETRY) run alembic downgrade -1
 
