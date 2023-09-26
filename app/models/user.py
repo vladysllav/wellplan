@@ -1,14 +1,15 @@
 import enum
 
-from sqlalchemy import Boolean, Column, Integer, String, Date, Enum
+from sqlalchemy import Boolean, Column, Date, Enum, Integer, String
+
 from app.db.base_class import Base
 from app.models.base import TimestampedModel
 
 
 class UserTypeEnum(enum.Enum):
-    client = 'client'
-    admin = 'admin'
-    superadmin = 'superadmin'
+    client = "client"
+    admin = "admin"
+    superadmin = "superadmin"
 
 
 class User(TimestampedModel, Base):

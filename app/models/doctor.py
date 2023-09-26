@@ -1,9 +1,8 @@
-from sqlalchemy import Table, Column, Integer, ForeignKey, String, Date, Text
+from sqlalchemy import Column, Date, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 from app.models.base import TimestampedModel
-
 
 doctor_branch_association = Table(
     "doctor_branch",
@@ -24,7 +23,9 @@ class Doctor(TimestampedModel, Base):
     profile_image = Column(String, nullable=True)
     date_of_birth = Column(Date(), nullable=False)
 
-    branches = relationship("Branch", secondary=doctor_branch_association, back_populates="doctors")
+    branches = relationship(
+        "Branch", secondary=doctor_branch_association, back_populates="doctors"
+    )
 
 
 class Branch(TimestampedModel, Base):
@@ -32,4 +33,6 @@ class Branch(TimestampedModel, Base):
     title = Column(String, nullable=False)
     description = Column(Text)
 
-    doctors = relationship("Doctor", secondary=doctor_branch_association, back_populates="branches")
+    doctors = relationship(
+        "Doctor", secondary=doctor_branch_association, back_populates="branches"
+    )

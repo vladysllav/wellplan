@@ -1,9 +1,9 @@
 import os
-import jwt
-from passlib.context import CryptContext
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
 
+import jwt
+from dotenv import load_dotenv
+from passlib.context import CryptContext
 
 load_dotenv()
 
@@ -43,4 +43,3 @@ def verifying_password(plain_password: str, hashed_password: str):
 
 def hashing_password(plain_password: str):
     return password_context.hash(plain_password)
-

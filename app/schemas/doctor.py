@@ -1,5 +1,6 @@
-from typing import List
 from datetime import date
+from typing import List
+
 from pydantic import BaseModel
 
 
@@ -10,8 +11,6 @@ class BaseDoctor(BaseModel):
     email: str
     date_of_birth: date
     # branch_id: int
-
-
 
 
 class DoctorUpdate(BaseDoctor):
@@ -48,4 +47,3 @@ class Branch(BaseBranch):
 
 class BranchUpdate(BaseBranch):
     description: str
-
