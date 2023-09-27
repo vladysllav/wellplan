@@ -13,8 +13,6 @@ class BaseDoctor(BaseModel):
     # branch_id: int
 
 
-
-
 class DoctorUpdate(BaseDoctor):
     middle_name: str
     description: str

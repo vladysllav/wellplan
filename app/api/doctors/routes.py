@@ -1,10 +1,16 @@
-
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
 from app.models import Doctor, Branch
-from app.schemas.doctor import CreateDoctor, DoctorUpdate, CreateBranch, BranchUpdate, BaseDoctor, BaseBranch
+from app.schemas.doctor import (
+    CreateDoctor,
+    DoctorUpdate,
+    CreateBranch,
+    BranchUpdate,
+    BaseDoctor,
+    BaseBranch,
+)
 from app.api.deps import get_db
 
 
@@ -15,21 +21,27 @@ crud_doctor = CRUDBase(Doctor)
 crud_branch = CRUDBase(Branch)
 
 
-@doctors_router.post("/doctors/", response_model=CreateDoctor, status_code=status.HTTP_201_CREATED)
+@doctors_router.post(
+    "/doctors/", response_model=CreateDoctor, status_code=status.HTTP_201_CREATED
+)
 def create_doctor(obj_in: CreateDoctor, db: Session = Depends(get_db)):
     doctor = crud_doctor.create(db, obj_in=obj_in)
 
     return doctor
 
 
-@doctors_router.get("/doctors/", response_model=list[BaseDoctor], status_code=status.HTTP_200_OK)
+@doctors_router.get(
+    "/doctors/", response_model=list[BaseDoctor], status_code=status.HTTP_200_OK
+)
 def get_doctor_list(db: Session = Depends(get_db)):
     doctors = crud_doctor.get_multi(db)
 
     return doctors
 
 
-@doctors_router.get("/doctors/{doctor_id}", response_model=BaseDoctor, status_code=status.HTTP_200_OK)
+@doctors_router.get(
+    "/doctors/{doctor_id}", response_model=BaseDoctor, status_code=status.HTTP_200_OK
+)
 def get_doctor(doctor_id: int, db: Session = Depends(get_db)):
     doctor = crud_doctor.get(db, doctor_id)
     if doctor is None:
@@ -38,7 +50,9 @@ def get_doctor(doctor_id: int, db: Session = Depends(get_db)):
     return doctor
 
 
-@doctors_router.put("/doctors/{doctor_id}", response_model=DoctorUpdate, status_code=status.HTTP_200_OK)
+@doctors_router.put(
+    "/doctors/{doctor_id}", response_model=DoctorUpdate, status_code=status.HTTP_200_OK
+)
 def update_doctor(doctor_id: int, obj_in: DoctorUpdate, db: Session = Depends(get_db)):
     doctor = crud_doctor.get(db, doctor_id)
     if doctor is None:
@@ -58,14 +72,18 @@ def delete_doctor(doctor_id: int, db: Session = Depends(get_db)):
     return db_obj
 
 
-@branches_router.get("/branches/", response_model=list[BaseBranch], status_code=status.HTTP_200_OK)
+@branches_router.get(
+    "/branches/", response_model=list[BaseBranch], status_code=status.HTTP_200_OK
+)
 def get_branches_list(db: Session = Depends(get_db)):
     branches = crud_branch.get_multi(db)
 
     return branches
 
 
-@branches_router.get("/branches/{branch_id}", response_model=BaseBranch, status_code=status.HTTP_200_OK)
+@branches_router.get(
+    "/branches/{branch_id}", response_model=BaseBranch, status_code=status.HTTP_200_OK
+)
 def get_branches(branch_id: int, db: Session = Depends(get_db)):
     branches = crud_branch.get(db, id=branch_id)
     if branches is None:
@@ -74,14 +92,18 @@ def get_branches(branch_id: int, db: Session = Depends(get_db)):
     return branches
 
 
-@branches_router.post("/branches/", response_model=CreateBranch, status_code=status.HTTP_201_CREATED)
+@branches_router.post(
+    "/branches/", response_model=CreateBranch, status_code=status.HTTP_201_CREATED
+)
 def create_branch(obj_in: CreateBranch, db: Session = Depends(get_db)):
     branches = crud_branch.create(db, obj_in=obj_in)
 
     return branches
 
 
-@branches_router.put("/branches/{branch_id}", response_model=BranchUpdate, status_code=status.HTTP_200_OK)
+@branches_router.put(
+    "/branches/{branch_id}", response_model=BranchUpdate, status_code=status.HTTP_200_OK
+)
 def branch_update(branch_id: int, obj_in: BranchUpdate, db: Session = Depends(get_db)):
     branches = crud_branch.get(db, branch_id)
     if branches is None:
