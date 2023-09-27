@@ -7,13 +7,14 @@ from app.api.auth import routes as auth_routes
 from app.api.deps import get_db
 from app.crud.base import CRUDBase
 from app.models import Doctor, Branch
+from app.api.users import routes as user_routes
 
 from app.schemas.doctor import CreateDoctor, DoctorUpdate, CreateBranch, BranchUpdate, BaseDoctor, BaseBranch
 
 api_router = APIRouter()
 
 api_router.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
-
+api_router.include_router(user_routes.router, prefix="/users", tags=["users"])
 
 @api_router.post("/alive")
 def alive() -> Any:
