@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app.api.deps import get_db
 from app.crud.user import crud_user
+
 router = APIRouter()
 from app.core.security import token_create
 
@@ -14,11 +15,10 @@ from app.core.security import token_create
 #     return user_info_from_db
 #
 
+
 @router.patch("/{user_id}", response_model=schemas.User)
 def update_user(
-    user_id: int,
-    user_in: schemas.UserUpdate,
-    db: Session = Depends(get_db)
+    user_id: int, user_in: schemas.UserUpdate, db: Session = Depends(get_db)
 ):
     user = crud_user.user.get_user(db, user_id)
     if not user:
