@@ -1,4 +1,4 @@
-import sys
+import argparse
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import *
@@ -20,11 +20,16 @@ def create_superuser(email: str, password: str):
     else:
         print("Superuser with this email already exists.")
 
-if len(sys.argv) != 3:
-    print("Usage: python create_superuser.py <email> <password>")
-    sys.exit(1)
+def main():
+    parser = argparse.ArgumentParser(description='Create a superuser.')
+    parser.add_argument('email', type=str, help='Email address for the superuser')
+    parser.add_argument('password', type=str, help='Password for the superuser')
 
-email = sys.argv[1]
-password = sys.argv[2]
+    args = parser.parse_args()
+    email = args.email
+    password = args.password
 
-create_superuser(email, hashing_password(password))
+    create_superuser(email, hashing_password(password))
+
+if __name__ == "__main__":
+    main()
