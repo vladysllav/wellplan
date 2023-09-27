@@ -17,13 +17,16 @@ class CRUDUser:
         db.refresh(db_user)
         return db_user
 
-    def update_user(self, db: Session, user_id: int, user: UserUpdate):
-        db_user = db.query(User).filter(User.id == user_id).first()
-        for field, value in user.dict().items():
-            setattr(db_user, field, value)
-        db.commit()
-        db.refresh(db_user)
-        return db_user
+    def update_user(self, db: Session, user_id: int, user_update: UserUpdate):
+        db_user = self.get_user(db, user_id)
+        if db_user:
+            update_data = user_update.dict(exclude_unset=True)
+            for field, value in update_data.items():
+                setattr(db_user, field, value)
+            db.commit()
+            db.refresh(db_user)
+            return db_user
+        return None
 
     def delete_user(self, db: Session, user_id: int):
         db_user = db.query(User).filter(User.id == user_id).first()
