@@ -1,12 +1,20 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 from datetime import date
-from app.models.user import User as DBUser
+from app.models.user import User as DBUser, UserTypeEnum
 
 
 class UserLogin(BaseModel):
-    username: EmailStr
+    email: EmailStr
     password: str
+
+
+class UserSignUp(BaseModel):
+    first_name: str
+    last_name: str
+    email: EmailStr
+    password: str
+    date_of_birth: date
 
 
 class UserCreate(BaseModel):
@@ -31,8 +39,13 @@ class User(BaseModel):
     last_name: str
     email: EmailStr
     is_active: bool
-    user_type: str
+    user_type: UserTypeEnum
     date_of_birth: date
 
     class Config:
         orm_mode = True
+
+
+class UserSignUpResponse(User):
+    access_token: str
+    refresh_token: str
