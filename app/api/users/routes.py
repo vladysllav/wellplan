@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from app import schemas
 from app.api.deps import get_db
 from app.crud.user import crud_user
 
 router = APIRouter()
+
 
 # @router.get("/profile", response_model=schemas.User)
 # def read_user_profile(db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):

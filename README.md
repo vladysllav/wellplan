@@ -106,4 +106,3 @@ Here's how to get project up and running in Docker
     ```
     docker-compose up
     ```
-    
