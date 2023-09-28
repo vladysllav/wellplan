@@ -9,7 +9,6 @@ from app.core.config import settings
 from app.core.security import hash_password, create_token
 from app.crud.user import crud_user
 
-
 router = APIRouter()
 
 

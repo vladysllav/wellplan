@@ -1,7 +1,7 @@
 """Create type for user - usertypeenum
 
 Revision ID: 088a9eec40f7
-Revises: 
+Revises:
 Create Date: 2023-09-20 12:38:08.230968
 
 """

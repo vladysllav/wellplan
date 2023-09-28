@@ -1,18 +1,17 @@
-from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.api.deps import get_db
 from app.crud.base import CRUDBase
-from app.models import Doctor, Branch
+from app.models import Branch, Doctor
 from app.schemas.doctor import (
+    BaseBranch,
+    BaseDoctor,
+    BranchUpdate,
+    CreateBranch,
     CreateDoctor,
     DoctorUpdate,
-    CreateBranch,
-    BranchUpdate,
-    BaseDoctor,
-    BaseBranch,
 )
-from app.api.deps import get_db
-
 
 doctors_router = APIRouter()
 branches_router = APIRouter()
