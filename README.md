@@ -47,3 +47,21 @@ Your application should now be running at `http://localhost:8000`.
 To run the tests for the application, navigate to the project directory in the terminal and run the following command:
 
     poetry run pytest
+
+
+## Usage with Docker
+
+Here's how to get project up and running in Docker
+
+1. We use the docker-compose build command for building the images for the services in a consistent and reproducible way, making deployment in different environments easier:
+    
+    ```
+    docker-compose build
+    ```
+
+2. After that, you must run next command, It builds the images if they are not located locally and starts the containers:
+
+    ```
+    docker-compose up
+    ```
+    
