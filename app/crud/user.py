@@ -4,11 +4,11 @@ from sqlalchemy.orm import Session
 from app.models.user import User, UserTypeEnum
 from app.schemas.user import UserCreate, UserUpdate
 from app.core.security import verify_password
-
+from app.crud.base import CRUDBase
 from pydantic import EmailStr
 
 
-class CRUDUser:
+class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def get_user_by_id(self, db: Session, user_id: int):
         return db.query(User).filter(User.id == user_id).first()
 
