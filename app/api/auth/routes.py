@@ -58,7 +58,7 @@ def register_user(
     hashed_password = hash_password(user_data.password)
     user_data.password = hashed_password
     user = crud_user.create_user(db, user=user_data)
-    response = UserSignUpResponse(
+    response = schemas.UserSignUpResponse(
         **user.__dict__,
         access_token=create_token(
             {"user_id": user.id}, expire_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
