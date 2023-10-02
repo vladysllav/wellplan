@@ -4,7 +4,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app/
 
-COPY poetry.lock pyproject.toml ./
+COPY pyproject.toml ./
 
 RUN apt-get update \
     && apt-get install -y build-essential \
@@ -34,5 +34,3 @@ RUN sed -i 's/\r$//g' /fastapi-start && chmod +x /fastapi-start
 
 # Select internal user
 USER code
-
-CMD ["/app/entrypoint.sh"]
