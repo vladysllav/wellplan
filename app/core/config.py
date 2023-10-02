@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv('ACCESS_TOKEN_EXPIRE_MINUTES')
     REFRESH_TOKEN_EXPIRE_MINUTES: int = os.getenv('REFRESH_TOKEN_EXPIRE_MINUTES')
+    AUTHENTICATION__ALGORITHM: str = os.getenv('AUTHENTICATION__ALGORITHM')
+
     SERVER_NAME: str = 'wellplan'
     SERVER_HOST: AnyHttpUrl = 'http://127.0.0.1'
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins

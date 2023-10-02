@@ -27,7 +27,7 @@ class Doctor(BaseDoctor):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class BaseBranch(BaseModel):
@@ -42,7 +42,7 @@ class Branch(BaseBranch):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class BranchUpdate(BaseBranch):

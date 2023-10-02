@@ -29,7 +29,7 @@ def login(
     )
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    elif not crud_user.is_active(user):
+    elif not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return {
         "access_token": create_token(
@@ -58,7 +58,7 @@ def register_user(
 
     hashed_password = hash_password(user_data.password)
     user_data.password = hashed_password
-    user = crud_user.create_user(db, user=user_data)
+    user = crud_user.create(db, obj_in=user_data)
     response = schemas.UserSignUpResponse(
         **user.__dict__,
         access_token=create_token(
