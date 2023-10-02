@@ -1,7 +1,8 @@
-from typing import Optional
-from pydantic import BaseModel, EmailStr
 from datetime import date
-from app.models.user import User as DBUser, UserTypeEnum
+from app.models.user import UserTypeEnum
+from typing import Optional
+
+from pydantic import BaseModel, EmailStr
 
 
 class UserLogin(BaseModel):

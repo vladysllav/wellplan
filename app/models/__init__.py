@@ -1,2 +1,2 @@
-from .doctor import Branch, Doctor
-from .user import User
+from .doctor import Branch, Doctor  # noqa
+from .user import User  # noqa

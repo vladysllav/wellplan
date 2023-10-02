@@ -1,10 +1,14 @@
-from typing import Any
+from typing import Any, List
+
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from sqlalchemy.orm import Session
+
 
 from fastapi import APIRouter
 
 from app.api.auth import routes as auth_routes
-from app.api.doctors import routes as doctor_router
 from app.api.doctors import routes as branch_router
+from app.api.doctors import routes as doctor_router
 
 
 api_router = APIRouter()
