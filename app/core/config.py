@@ -41,11 +41,13 @@ class Settings(BaseSettings):
             return None
         return v
 
-    POSTGRES_SERVER: str = "localhost:5432"
-    POSTGRES_USER: str = os.getenv("POSTGRES_USER")
-    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")
-    POSTGRES_DB: str = os.getenv("POSTGRES_DB")
-    SQLALCHEMY_DATABASE_URI: Optional[str] = None
+    POSTGRES_HOST: str = os.getenv('POSTGRES_HOST')
+    POSTGRES_PORT: str = os.getenv('POSTGRES_PORT')
+    POSTGRES_SERVER: str = f'{POSTGRES_HOST}:{POSTGRES_PORT}'
+    POSTGRES_USER: str = os.getenv('POSTGRES_USER')
+    POSTGRES_PASSWORD: str = os.getenv('POSTGRES_PASSWORD')
+    POSTGRES_DB: str = os.getenv('POSTGRES_DB')
+    SQLALCHEMY_DATABASE_URI: Optional[str] = os.getenv('DATABASE_URL')
 
     @field_validator("SQLALCHEMY_DATABASE_URI", mode="before")
     @classmethod
