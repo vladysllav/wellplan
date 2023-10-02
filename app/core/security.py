@@ -1,8 +1,9 @@
 import os
-from datetime import datetime, timedelta
 
 import jwt
 from passlib.context import CryptContext
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
 
 from app.core.config import settings
 

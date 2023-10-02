@@ -1,2 +1,2 @@
-from .token import Token
-from .user import UserLogin, User, UserCreate, UserUpdate, UserSignUp, UserSignUpResponse
+from .token import Token  # noqa
+from .user import User, UserCreate, UserLogin, UserUpdate, UserSignUpResponse, UserSignUp # noqa
