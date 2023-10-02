@@ -5,12 +5,8 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
-load_dotenv()
+from app.core.config import settings
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("TOKEN_SIGNING_ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
-REFRESH_TOKEN_EXPIRE_MINUTES = os.getenv("REFRESH_TOKEN_EXPIRE_MINUTES")
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -20,15 +16,15 @@ def create_token(data: dict, expire_minutes: int | None = None):
     if expire_minutes:
         expire = datetime.utcnow() + timedelta(expire_minutes)
     else:
-        expire = datetime.utcnow() + timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
+        expire = datetime.utcnow() + timedelta(minutes=int(settings.ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.AUTHENTICATION__ALGORITHM)
     return encoded_jwt
 
 
 def token_decode(token: str):
     try:
-        decoded_token = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
         return decoded_token
     except jwt.ExpiredSignatureError:
         # Handle token expiration

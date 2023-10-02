@@ -21,3 +21,7 @@ class User(TimestampedModel, Base):
     is_active = Column(Boolean(), default=True)
     user_type = Column(Enum(UserTypeEnum), nullable=False, default=UserTypeEnum.client)
     date_of_birth = Column(Date(), nullable=False)
+
+    @property
+    def is_superuser(self) -> bool:
+        return self.user_type == UserTypeEnum.superadmin
