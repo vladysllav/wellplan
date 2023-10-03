@@ -56,9 +56,8 @@ def update_doctor(doctor_id: int, obj_in: DoctorUpdate, db: Session = Depends(ge
     doctor = crud_doctor.get(db, doctor_id)
     if doctor is None:
         raise HTTPException(status_code=404, detail="Doctor not found")
-    doctor = crud_doctor.update(db, db_obj=doctor, obj_in=obj_in)
-
-    return doctor
+    updated_doctor = crud_doctor.update(db, db_obj=doctor, obj_in=obj_in)
+    return updated_doctor
 
 
 @doctors_router.delete("/{doctor_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -69,6 +68,21 @@ def delete_doctor(doctor_id: int, db: Session = Depends(get_db)):
     db_obj = crud_doctor.remove(db, id=doctor_id)
 
     return db_obj
+
+
+@doctors_router.patch("/{doctor_id}", response_model=BaseDoctor, status_code=status.HTTP_200_OK)
+def patch_doctor(doctor_id: int, obj_in: DoctorUpdate, db: Session = Depends(get_db)):
+    doctor = crud_doctor.get(db, doctor_id)
+    if doctor is None:
+        raise HTTPException(status_code=404, detail="Doctor not found")
+
+    # Обновляем только переданные поля
+    for field, value in obj_in.dict(exclude_unset=True).items():
+        setattr(doctor, field, value)
+
+    db.commit()
+    db.refresh(doctor)
+    return doctor
 
 
 @branches_router.get(
