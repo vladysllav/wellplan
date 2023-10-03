@@ -1,6 +1,5 @@
 import os
 from typing import Any, List, Optional, Union
-
 from dotenv import load_dotenv
 from pydantic import AnyHttpUrl, HttpUrl, PostgresDsn, field_validator
 
@@ -20,7 +19,7 @@ class Settings(BaseSettings):
     AUTHENTICATION__ALGORITHM: str = os.getenv('AUTHENTICATION__ALGORITHM')
 
     SERVER_NAME: str = 'wellplan'
-    SERVER_HOST: AnyHttpUrl = 'http://127.0.0.1'
+    SERVER_HOST: AnyHttpUrl = 'http://localhost:3000'
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
