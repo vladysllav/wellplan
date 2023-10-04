@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app.api import deps
 from app.core.config import settings
-from app.core.security import hash_password, create_token
+from app.core.security import create_token, hash_password
 from app.crud.user import crud_user
 
 router = APIRouter()
@@ -42,8 +42,7 @@ def login(
 
 @router.post("/sign-up", response_model=schemas.UserSignUpResponse, status_code=201)
 def register_user(
-    user_data: schemas.UserSignUp,
-    db: Session = Depends(deps.get_db)
+    user_data: schemas.UserSignUp, db: Session = Depends(deps.get_db)
 ) -> Any:
     """
     Register a new user.
