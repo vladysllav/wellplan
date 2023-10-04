@@ -13,9 +13,7 @@ router = APIRouter()
 
 
 @router.post("/login", response_model=schemas.Token)
-def login(
-    db: Session = Depends(deps.get_db), user_data: schemas.UserLogin = Body(...)
-) -> Any:
+def login(db: Session = Depends(deps.get_db), user_data: schemas.UserLogin = Body(...)) -> Any:
     """
     Endpoint to allow users to login
 
@@ -23,27 +21,19 @@ def login(
     :param user_data: Body object with email and password
     :return: jwt access and refresh token
     """
-    user = crud_user.authenticate(
-        db, email=user_data.email, password=user_data.password
-    )
+    user = crud_user.authenticate(db, email=user_data.email, password=user_data.password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
     elif not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return {
-        "access_token": create_token(
-            {"user_id": user.id}, expire_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-        ),
-        "refresh_token": create_token(
-            {"user_id": user.id}, expire_minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES
-        ),
+        "access_token": create_token({"user_id": user.id}, expire_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
+        "refresh_token": create_token({"user_id": user.id}, expire_minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES),
     }
 
 
 @router.post("/sign-up", response_model=schemas.UserSignUpResponse, status_code=201)
-def register_user(
-    user_data: schemas.UserSignUp, db: Session = Depends(deps.get_db)
-) -> Any:
+def register_user(user_data: schemas.UserSignUp, db: Session = Depends(deps.get_db)) -> Any:
     """
     Register a new user.
     """
@@ -59,12 +49,8 @@ def register_user(
     user = crud_user.create(db, obj_in=user_data)
     response = schemas.UserSignUpResponse(
         **user.__dict__,
-        access_token=create_token(
-            {"user_id": user.id}, expire_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-        ),
-        refresh_token=create_token(
-            {"user_id": user.id}, expire_minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES
-        ),
+        access_token=create_token({"user_id": user.id}, expire_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
+        refresh_token=create_token({"user_id": user.id}, expire_minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES),
     )
     return response
 

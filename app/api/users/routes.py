@@ -18,9 +18,7 @@ router = APIRouter()
 
 
 @router.patch("/{user_id}", response_model=schemas.User)
-def update_user(
-    user_id: int, user_in: schemas.UserUpdate, db: Session = Depends(get_db)
-):
+def update_user(user_id: int, user_in: schemas.UserUpdate, db: Session = Depends(get_db)):
     user = crud_user.get(db, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
