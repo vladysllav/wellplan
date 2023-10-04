@@ -14,16 +14,16 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api"
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     # 60 minutes * 24 hours * 8 days = 8 days
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv('ACCESS_TOKEN_EXPIRE_MINUTES')
-    REFRESH_TOKEN_EXPIRE_MINUTES: int = os.getenv('REFRESH_TOKEN_EXPIRE_MINUTES')
-    AUTHENTICATION__ALGORITHM: str = os.getenv('AUTHENTICATION__ALGORITHM')
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+    REFRESH_TOKEN_EXPIRE_MINUTES: int = os.getenv("REFRESH_TOKEN_EXPIRE_MINUTES")
+    AUTHENTICATION__ALGORITHM: str = os.getenv("AUTHENTICATION__ALGORITHM")
 
-    SERVER_NAME: str = 'wellplan'
-    SERVER_HOST: AnyHttpUrl = 'http://localhost:3000'
+    SERVER_NAME: str = "wellplan"
+    SERVER_HOST: AnyHttpUrl = "http://localhost:3000"
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost:3000"]
 
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod
@@ -44,13 +44,13 @@ class Settings(BaseSettings):
             return None
         return v
 
-    POSTGRES_HOST: str = os.getenv('POSTGRES_HOST')
-    POSTGRES_PORT: str = os.getenv('POSTGRES_PORT')
-    POSTGRES_SERVER: str = f'{POSTGRES_HOST}:{POSTGRES_PORT}'
-    POSTGRES_USER: str = os.getenv('POSTGRES_USER')
-    POSTGRES_PASSWORD: str = os.getenv('POSTGRES_PASSWORD')
-    POSTGRES_DB: str = os.getenv('POSTGRES_DB')
-    SQLALCHEMY_DATABASE_URI: Optional[str] = os.getenv('DATABASE_URL')
+    POSTGRES_HOST: str = os.getenv("POSTGRES_HOST")
+    POSTGRES_PORT: str = os.getenv("POSTGRES_PORT")
+    POSTGRES_SERVER: str = f"{POSTGRES_HOST}:{POSTGRES_PORT}"
+    POSTGRES_USER: str = os.getenv("POSTGRES_USER")
+    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")
+    POSTGRES_DB: str = os.getenv("POSTGRES_DB")
+    SQLALCHEMY_DATABASE_URI: Optional[str] = os.getenv("DATABASE_URL")
 
     @field_validator("SQLALCHEMY_DATABASE_URI", mode="before")
     @classmethod
