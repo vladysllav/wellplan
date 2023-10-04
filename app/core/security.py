@@ -1,12 +1,11 @@
 import os
+from datetime import datetime, timedelta
 
 import jwt
-from passlib.context import CryptContext
-from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from passlib.context import CryptContext
 
 from app.core.config import settings
-
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

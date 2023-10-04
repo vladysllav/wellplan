@@ -1,11 +1,12 @@
 from typing import Optional
 
+from pydantic import EmailStr
 from sqlalchemy.orm import Session
-from app.models.user import User, UserTypeEnum
-from app.schemas.user import UserCreate, UserUpdate
+
 from app.core.security import verify_password
 from app.crud.base import CRUDBase
-from pydantic import EmailStr
+from app.models.user import User, UserTypeEnum
+from app.schemas.user import UserCreate, UserUpdate
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):

@@ -96,7 +96,7 @@ To run the tests for the application, navigate to the project directory in the t
 Here's how to get project up and running in Docker
 
 1. We use the docker-compose build command for building the images for the services in a consistent and reproducible way, making deployment in different environments easier:
-    
+
     ```
     docker-compose build
     ```
