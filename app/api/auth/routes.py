@@ -1,3 +1,4 @@
+import os
 from typing import Any
 
 from fastapi import APIRouter, Body, Depends, HTTPException
@@ -6,8 +7,10 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app.api import deps
 from app.core.config import settings
-from app.core.security import create_token, hash_password
+from app.core.security import create_token, hash_password, create_reset_token
 from app.crud.user import crud_user
+from app.schemas.email import ResponseMessage
+from app.email import send_reset_password_email
 
 router = APIRouter()
 
@@ -53,6 +56,20 @@ def register_user(user_data: schemas.UserSignUp, db: Session = Depends(deps.get_
         refresh_token=create_token({"user_id": user.id}, expire_minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES),
     )
     return response
+
+
+@router.post("/forgot-password", response_model=ResponseMessage, status_code=201)
+def forgot_password(user_email: str = Body(...), db: Session = Depends(deps.get_db)):
+    user = crud_user.get_user_by_email(db, email=user_email)
+    if not user:
+        return ResponseMessage(message=f"An email has been sent to {user_email} with a link to reset your password.")
+
+    reset_token = create_reset_token(user.id, int(os.getenv("TEMP_TOKEN_EXPIRE_MINUTES")))
+    base_url = "http://127.0.0.1:8000/"  # test url
+    reset_url = f"{base_url}/reset-password/{reset_token}"
+    send_reset_password_email(user_email, reset_url)
+
+    return ResponseMessage(message=f"An email has been sent to {user_email} with a link to reset your password.")
 
 
 # @router.put("/change-password", response_model=schemas.Message)

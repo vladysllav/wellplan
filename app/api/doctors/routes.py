@@ -87,11 +87,6 @@ def create_branch(obj_in: CreateBranch, db: Session = Depends(get_db)):
 
 
 @branches_router.put("/branches/{branch_id}", response_model=BranchUpdate, status_code=status.HTTP_200_OK)
-def foo():
-    pass
-
-
-@branches_router.put("/branches/{branch_id}", response_model=BranchUpdate, status_code=status.HTTP_200_OK)
 def branch_update(branch_id: int, obj_in: BranchUpdate, db: Session = Depends(get_db)):
     branches = crud_branch.get(db, branch_id)
     if branches is None:
