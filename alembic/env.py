@@ -1,11 +1,9 @@
-
 from logging.config import fileConfig
 
 from alembic import context
 from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 
-from app.core.config import settings
 from app.db.base import Base
 from app.core.config import settings
 
@@ -24,7 +22,7 @@ target_metadata = Base.metadata
 
 # Override the sqlalchemy.url value in the Alembic config
 
-config.set_main_option('sqlalchemy.url', settings.SQLALCHEMY_DATABASE_URI)
+config.set_main_option("sqlalchemy.url", settings.SQLALCHEMY_DATABASE_URI)
 
 
 # other values from the config, defined by the needs of env.py,

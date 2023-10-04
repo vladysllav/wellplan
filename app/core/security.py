@@ -1,9 +1,6 @@
-import os
-
 import jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
 
 from app.core.config import settings
 
@@ -16,15 +13,21 @@ def create_token(data: dict, expire_minutes: int | None = None):
     if expire_minutes:
         expire = datetime.utcnow() + timedelta(expire_minutes)
     else:
-        expire = datetime.utcnow() + timedelta(minutes=int(settings.ACCESS_TOKEN_EXPIRE_MINUTES))
+        expire = datetime.utcnow() + timedelta(
+            minutes=int(settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        )
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.AUTHENTICATION__ALGORITHM)
+    encoded_jwt = jwt.encode(
+        to_encode, settings.SECRET_KEY, algorithm=settings.AUTHENTICATION__ALGORITHM
+    )
     return encoded_jwt
 
 
 def token_decode(token: str):
     try:
-        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
+        decoded_token = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM]
+        )
         return decoded_token
     except jwt.ExpiredSignatureError:
         # Handle token expiration
@@ -32,6 +35,16 @@ def token_decode(token: str):
     except jwt.DecodeError:
         # Handle token decoding error
         return None
+
+
+def create_reset_token(user_id: int, expire_minutes: int):
+    to_encode = {
+        "user_id": user_id,
+        "exp": datetime.utcnow() + timedelta(minutes=expire_minutes),
+    }
+    return jwt.encode(
+        to_encode, settings.SECRET_KEY, algorithm=settings.AUTHENTICATION__ALGORITHM
+    )
 
 
 def verify_password(plain_password: str, hashed_password: str):
