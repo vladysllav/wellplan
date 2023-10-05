@@ -12,7 +12,6 @@ def create_superuser(email: str, password: str):
         user_in = UserCreate(
             email=email,
             password=hash_password(password),
-            full_name="Superuser",
             is_superuser=True,
         )
         CRUDUser.create(db, obj_in=user_in)
