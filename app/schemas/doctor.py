@@ -27,15 +27,16 @@ class CreateDoctor(BaseDoctor):
     branches: List[int]
 
 
+class BaseBranch(BaseModel):
+    title: str
+
+
 class DoctorSchema(BaseDoctor):
     id: int
+    branches: Optional[List[BaseBranch]] = None
 
     class Config:
         from_attributes = True
-
-
-class BaseBranch(BaseModel):
-    title: str
 
 
 class CreateBranch(BaseBranch):
