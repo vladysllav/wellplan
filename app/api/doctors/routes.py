@@ -41,24 +41,25 @@ def get_doctor(doctor_id: int, db: Session = Depends(get_db)):
     return doctor
 
 
-@doctors_router.post(
-    "/", response_model=CreateDoctor, status_code=status.HTTP_201_CREATED
-)
-def create_doctor(obj_in: CreateDoctor, db: Session = Depends(get_db)):
-    doctor = crud_doctor.create(db, obj_in=obj_in)
-
-    return doctor
-
-
-@doctors_router.put(
-    "/{doctor_id}", response_model=DoctorUpdate, status_code=status.HTTP_200_OK
-)
-def update_doctor(doctor_id: int, obj_in: DoctorUpdate, db: Session = Depends(get_db)):
-    doctor = crud_doctor.get(db, doctor_id)
-    if doctor is None:
-        raise HTTPException(status_code=404, detail="Doctor not found")
-    updated_doctor = crud_doctor.update(db, db_obj=doctor, obj_in=obj_in)
-    return updated_doctor
+# @doctors_router.post(
+#     "/", response_model=CreateDoctor, status_code=status.HTTP_201_CREATED
+# )
+# def create_doctor(obj_in: CreateDoctor, db: Session = Depends(get_db)):
+#     if not obj_in.branches:
+#         raise HTTPException(status_code=400, detail="At least one branch must be provided")
+#
+#     doctor = crud_doctor.create(db, obj_in=obj_in)
+#
+#     for branch_id in obj_in.branches:
+#         branch = crud_branch.get(db, branch_id)
+#         if branch is None:
+#             raise HTTPException(status_code=404, detail=f"Branch with id {branch_id} not found")
+#
+#         doctor.branches.append(branch)
+#
+#     db.commit()
+#
+#     return doctor
 
 
 @doctors_router.delete("/{doctor_id}", status_code=status.HTTP_204_NO_CONTENT)
