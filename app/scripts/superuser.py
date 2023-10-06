@@ -1,21 +1,23 @@
 import argparse
-from app.crud.user import CRUDUser
+from app.db.session import SessionLocal
+from app.crud.user import crud_user as crud_user
 from app.schemas.user import UserCreate
 from app.core.security import hash_password
-from app.db.session import SessionLocal
 
-def create_superuser(email: str, password: str):
+
+def create_superuser(first_name: str, last_name:str, email: str, password: str):
     db = SessionLocal()
-    crud_user = CRUDUser()
     user = crud_user.get_user_by_email(db, email=email)
     
     if not user:
         user_in = UserCreate(
             email=email,
             password=hash_password(password),
-            is_superuser=True,
+            first_name=first_name,
+            last_name=last_name,
+            is_superuser=True
         )
-        CRUDUser.create(db, obj_in=user_in)
+        crud_user.create(db, obj_in=user_in)
         print("Superuser created successfully.")
     else:
         print("Superuser with this email already exists.")
@@ -28,6 +30,7 @@ def main():
     parser.add_argument('password', type=str, help='Password for the superuser')
 
     args = parser.parse_args()
+    
     first_name = args.first_name
     last_name = args.last_name
     email = args.email
