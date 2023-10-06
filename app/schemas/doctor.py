@@ -1,6 +1,6 @@
 from datetime import date
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 
 class BaseDoctor(BaseModel):
@@ -24,7 +24,7 @@ class DoctorUpdate(BaseDoctor):
 
 
 class CreateDoctor(BaseDoctor):
-    pass
+    branches: List[int]
 
 
 class DoctorSchema(BaseDoctor):
