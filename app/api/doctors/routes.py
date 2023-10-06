@@ -41,25 +41,32 @@ def get_doctor(doctor_id: int, db: Session = Depends(get_db)):
     return doctor
 
 
-# @doctors_router.post(
-#     "/", response_model=CreateDoctor, status_code=status.HTTP_201_CREATED
-# )
-# def create_doctor(obj_in: CreateDoctor, db: Session = Depends(get_db)):
-#     if not obj_in.branches:
-#         raise HTTPException(status_code=400, detail="At least one branch must be provided")
-#
-#     doctor = crud_doctor.create(db, obj_in=obj_in)
-#
-#     for branch_id in obj_in.branches:
-#         branch = crud_branch.get(db, branch_id)
-#         if branch is None:
-#             raise HTTPException(status_code=404, detail=f"Branch with id {branch_id} not found")
-#
-#         doctor.branches.append(branch)
-#
-#     db.commit()
-#
-#     return doctor
+@doctors_router.post("/", response_model=DoctorSchema, status_code=status.HTTP_201_CREATED)
+def create_doctor(obj_in: CreateDoctor, db: Session = Depends(get_db)):
+    if not obj_in.branches:
+        raise HTTPException(status_code=400, detail="At least one branch must be provided")
+
+    if not all(isinstance(branch_id, int) for branch_id in obj_in.branches):
+        raise HTTPException(status_code=400, detail="Invalid branch ID(s)")
+
+    doctor_data = obj_in.dict(exclude={"branches"})
+
+    branches = db.query(Branch).filter(Branch.id.in_(obj_in.branches)).all()
+
+    if len(branches) != len(obj_in.branches):
+        raise HTTPException(status_code=404, detail="One or more branches not found")
+
+    doctor_model = Doctor(**doctor_data)
+    db.add(doctor_model)
+    db.commit()
+    db.refresh(doctor_model)
+
+    for branch in branches:
+        doctor_model.branches.append(branch)
+
+    db.commit()
+
+    return doctor_model
 
 
 @doctors_router.delete("/{doctor_id}", status_code=status.HTTP_204_NO_CONTENT)
