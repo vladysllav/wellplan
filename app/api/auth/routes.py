@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app.api import deps
 from app.core.config import settings
-from app.core.security import create_token, hash_password, create_reset_token
+from app.core.security import create_token, hash_password, create_reset_token, verify_reset_token
 from app.crud.user import crud_user
 from app.schemas.email import ResponseMessage
 from app.email import send_reset_password_email
@@ -64,12 +64,32 @@ def forgot_password(user_email: str = Body(...), db: Session = Depends(deps.get_
     if not user:
         return ResponseMessage(message=f"An email has been sent to {user_email} with a link to reset your password.")
 
-    reset_token = create_reset_token(user.id, int(os.getenv("TEMP_TOKEN_EXPIRE_MINUTES")))
-    base_url = "http://127.0.0.1:8000/"  # test url
+    reset_token = create_reset_token(user.id, int(os.getenv("FORGOT_PASSWORD_TOKEN_EXPIRE_MINUTES")))
+    base_url = os.getenv("BASE_URL")  # test url
     reset_url = f"{base_url}/reset-password/{reset_token}"
     send_reset_password_email(user_email, reset_url)
 
     return ResponseMessage(message=f"An email has been sent to {user_email} with a link to reset your password.")
+
+
+@router.post("/reset-password", response_model=ResponseMessage, status_code=200)
+def reset_password(
+    reset_token: str = Body(...),
+    new_password: str = Body(...),
+    db: Session = Depends(deps.get_db),
+):
+    user_id = verify_reset_token(reset_token)
+    if not user_id:
+        raise HTTPException(status_code=400, detail="Invalid reset token")
+
+    user = crud_user.get_user(db, user_id=user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    hashed_password = hash_password(new_password)
+    user.password = hashed_password
+    db.commit()
+    return ResponseMessage(message="Password reset successfully")
 
 
 # @router.put("/change-password", response_model=schemas.Message)

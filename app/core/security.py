@@ -41,6 +41,22 @@ def token_decode(token: str):
         return None
 
 
+def verify_reset_token(token: str):
+    try:
+        print("i'm here")
+        print(token)
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
+        print(payload)
+        user_id = int(payload.get("user_id"))
+        return user_id
+    except jwt.ExpiredSignatureError:
+        # Handle token expiration
+        return None
+    except jwt.DecodeError:
+        # Handle token decoding error
+        return None
+
+
 def verify_password(plain_password: str, hashed_password: str):
     return password_context.verify(plain_password, hashed_password)
 

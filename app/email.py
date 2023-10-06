@@ -6,8 +6,8 @@ import os
 
 def send_reset_password_email(recipient_email: str, reset_url: str):
     # setting for send email
-    smtp_server = "smtp.gmail.com"
-    smtp_port = 587
+    smtp_server = os.getenv("SMTP_SERVER")
+    smtp_port = os.getenv("SMTP_PORT")
     smtp_username = os.getenv("SMTP_USER_NAME")
     smtp_password = os.getenv("SMTP_PASSWORD")
 
