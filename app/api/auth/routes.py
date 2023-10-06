@@ -98,9 +98,9 @@ def refresh_token(token: str = Depends(deps.oauth2_scheme), db: Session = Depend
 
     if not user:
         raise HTTPException(status_code=400, detail="User not found")
-    access_token = crud_user.create_token({"user_id": user.id}, settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_token({"user_id": user.id}, settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
-    return {"access_token": access_token, "refresh_token": user.refresh_token}
+    return {"access_token": access_token, "refresh_token": token}
 
 
 # @router.put("/change-password", response_model=schemas.Message)
