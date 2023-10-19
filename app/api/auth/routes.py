@@ -92,6 +92,17 @@ def reset_password(
     return ResponseMessage(message="Password reset successfully")
 
 
+@router.post("/refresh-token", response_model=schemas.Token, status_code=200)
+def refresh_token(token: str = Depends(deps.oauth2_scheme), db: Session = Depends(deps.get_db)) -> dict:
+    user = crud_user.get_current_user(db, token)
+
+    if not user:
+        raise HTTPException(status_code=400, detail="User not found")
+    access_token = create_token({"user_id": user.id}, settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+
+    return {"access_token": access_token, "refresh_token": token}
+
+
 # @router.put("/change-password", response_model=schemas.Message)
 # def change_password(
 #     current_user: User = Depends(deps.get_current_user),
