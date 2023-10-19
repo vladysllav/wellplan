@@ -21,10 +21,34 @@ def create_token(data: dict, expire_minutes: int | None = None):
     return encoded_jwt
 
 
+def create_reset_token(user_id: int, expire_minutes: int):
+    to_encode = {
+        "user_id": user_id,
+        "exp": datetime.utcnow() + timedelta(minutes=expire_minutes),
+    }
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.AUTHENTICATION__ALGORITHM)
+
+
 def token_decode(token: str):
     try:
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
         return decoded_token
+    except jwt.ExpiredSignatureError:
+        # Handle token expiration
+        return None
+    except jwt.DecodeError:
+        # Handle token decoding error
+        return None
+
+
+def verify_reset_token(token: str):
+    try:
+        print("i'm here")
+        print(token)
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
+        print(payload)
+        user_id = int(payload.get("user_id"))
+        return user_id
     except jwt.ExpiredSignatureError:
         # Handle token expiration
         return None
