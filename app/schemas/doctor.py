@@ -1,6 +1,6 @@
 from datetime import date
-
 from pydantic import BaseModel
+from typing import Optional, List
 
 
 class BaseDoctor(BaseModel):
@@ -13,24 +13,30 @@ class BaseDoctor(BaseModel):
 
 
 class DoctorUpdate(BaseDoctor):
-    middle_name: str
-    description: str
-    profile_image: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    experience: Optional[int] = None
+    email: Optional[str] = None
+    date_of_birth: Optional[date] = None
+    middle_name: Optional[str] = None
+    description: Optional[str] = None
+    profile_image: Optional[str] = None
 
 
 class CreateDoctor(BaseDoctor):
-    pass
-
-
-class Doctor(BaseDoctor):
-    id: int
-
-    class Config:
-        from_attributes = True
+    branches: List[int]
 
 
 class BaseBranch(BaseModel):
     title: str
+
+
+class DoctorSchema(BaseDoctor):
+    id: int
+    branches: Optional[List[BaseBranch]] = None
+
+    class Config:
+        from_attributes = True
 
 
 class CreateBranch(BaseBranch):
