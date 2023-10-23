@@ -22,18 +22,14 @@ crud_doctor = CRUDBase(Doctor)
 crud_branch = CRUDBase(Branch)
 
 
-@doctors_router.get(
-    "/", response_model=list[DoctorSchema], status_code=status.HTTP_200_OK
-)
+@doctors_router.get("/", response_model=list[DoctorSchema], status_code=status.HTTP_200_OK)
 def get_doctor_list(db: Session = Depends(get_db), user: User = Depends(auth)):
     doctors = crud_doctor.get_multi(db)
 
     return doctors
 
 
-@doctors_router.get(
-    "/{doctor_id}", response_model=DoctorSchema, status_code=status.HTTP_200_OK
-)
+@doctors_router.get("/{doctor_id}", response_model=DoctorSchema, status_code=status.HTTP_200_OK)
 def get_doctor(doctor_id: int, db: Session = Depends(get_db), user: User = Depends(auth)):
     doctor = crud_doctor.get(db, doctor_id)
     if doctor is None:
@@ -81,7 +77,7 @@ def delete_doctor(doctor_id: int, db: Session = Depends(get_db), user: User = De
 
 
 @doctors_router.patch("/{doctor_id}", response_model=BaseDoctor, status_code=status.HTTP_200_OK)
-def patch_doctor(doctor_id: int, obj_in: DoctorUpdate, db: Session = Depends(get_db),user: User = Depends(auth)):
+def patch_doctor(doctor_id: int, obj_in: DoctorUpdate, db: Session = Depends(get_db), user: User = Depends(auth)):
     doctor = crud_doctor.get(db, doctor_id)
     if doctor is None:
         raise HTTPException(status_code=404, detail="Doctor not found")
@@ -95,18 +91,14 @@ def patch_doctor(doctor_id: int, obj_in: DoctorUpdate, db: Session = Depends(get
     return doctor
 
 
-@branches_router.get(
-    "/", response_model=list[BaseBranch], status_code=status.HTTP_200_OK
-)
+@branches_router.get("/", response_model=list[BaseBranch], status_code=status.HTTP_200_OK)
 def get_branches_list(db: Session = Depends(get_db), user: User = Depends(auth)):
     branches = crud_branch.get_multi(db)
 
     return branches
 
 
-@branches_router.get(
-    "/{branch_id}", response_model=BaseBranch, status_code=status.HTTP_200_OK
-)
+@branches_router.get("/{branch_id}", response_model=BaseBranch, status_code=status.HTTP_200_OK)
 def get_branches(branch_id: int, db: Session = Depends(get_db), user: User = Depends(auth)):
     branches = crud_branch.get(db, id=branch_id)
     if branches is None:
@@ -115,18 +107,14 @@ def get_branches(branch_id: int, db: Session = Depends(get_db), user: User = Dep
     return branches
 
 
-@branches_router.post(
-    "/", response_model=CreateBranch, status_code=status.HTTP_201_CREATED
-)
+@branches_router.post("/", response_model=CreateBranch, status_code=status.HTTP_201_CREATED)
 def create_branch(obj_in: CreateBranch, db: Session = Depends(get_db), user: User = Depends(auth)):
     branches = crud_branch.create(db, obj_in=obj_in)
 
     return branches
 
 
-@branches_router.put(
-    "/{branch_id}", response_model=BranchUpdate, status_code=status.HTTP_200_OK
-)
+@branches_router.put("/{branch_id}", response_model=BranchUpdate, status_code=status.HTTP_200_OK)
 def branch_update(branch_id: int, obj_in: BranchUpdate, db: Session = Depends(get_db), user: User = Depends(auth)):
     branches = crud_branch.get(db, branch_id)
     if branches is None:

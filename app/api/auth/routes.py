@@ -7,8 +7,15 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app.api import deps
 from app.core.config import settings
-from app.core.security import create_token, hash_password, create_reset_token, verify_reset_token, apikey_scheme, \
-    create_refresh_token, verify_refresh_token
+from app.core.security import (
+    create_token,
+    hash_password,
+    create_reset_token,
+    verify_reset_token,
+    apikey_scheme,
+    create_refresh_token,
+    verify_refresh_token,
+)
 from app.crud.user import crud_user
 from app.models import User
 from app.schemas.email import ResponseMessage
@@ -94,16 +101,10 @@ async def refresh_token(token: str = Body(...), db: Session = Depends(deps.get_d
 
     if decoded_token is None:
         new_access_token = create_token(data=decoded_token)
-        return {
-            "access_token": new_access_token,
-            "refresh_token": None
-        }
+        return {"access_token": new_access_token, "refresh_token": None}
 
     new_refresh_token = create_refresh_token(data=decoded_token)
-    return {
-        "refresh_token": new_refresh_token,
-        "access_token": None
-    }
+    return {"refresh_token": new_refresh_token, "access_token": None}
 
 
 @router.post("/reset-password", response_model=ResponseMessage, status_code=200)
@@ -111,7 +112,7 @@ def reset_password(
     reset_token: str = Body(...),
     new_password: str = Body(...),
     db: Session = Depends(deps.get_db),
-    user: User = Depends(auth)
+    user: User = Depends(auth),
 ):
     user_id = verify_reset_token(reset_token)
     if not user_id:

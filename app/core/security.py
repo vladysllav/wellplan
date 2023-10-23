@@ -37,10 +37,8 @@ def token_decode(token: str):
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
         return decoded_token
     except jwt.ExpiredSignatureError:
-
         return None
     except jwt.DecodeError:
-
         return None
 
 
@@ -68,10 +66,8 @@ def verify_refresh_token(token: str):
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
         return decoded_token
     except jwt.ExpiredSignatureError:
-
         return None
     except jwt.DecodeError:
-
         return False
 
 
