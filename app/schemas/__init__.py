@@ -6,5 +6,4 @@ from .user import (
     UserSignUp,
     UserSignUpResponse,
     UserUpdate,
-    UserAuth,
 )  # noqa

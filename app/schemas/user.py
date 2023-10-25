@@ -53,7 +53,3 @@ class UserSignUpResponse(User):
     refresh_token: str
 
 
-class UserAuth(User):
-    id: int
-    email: EmailStr
-    user_type: UserTypeEnum
