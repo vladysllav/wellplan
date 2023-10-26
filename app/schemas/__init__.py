@@ -1,4 +1,4 @@
-from .token import Token  # noqa
+from .token import Token, RefreshToken  # noqa
 from .user import (
     User,
     UserCreate,

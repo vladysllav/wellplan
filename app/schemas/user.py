@@ -51,3 +51,5 @@ class User(BaseModel):
 class UserSignUpResponse(User):
     access_token: str
     refresh_token: str
+
+

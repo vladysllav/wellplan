@@ -2,12 +2,15 @@ import os
 from datetime import datetime, timedelta
 
 import jwt
-from dotenv import load_dotenv
+
+from fastapi.security import APIKeyHeader
 from passlib.context import CryptContext
 
 from app.core.config import settings
 
+
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+apikey_scheme = APIKeyHeader(name="Authorization")
 
 
 def create_token(data: dict, expire_minutes: int | None = None):
@@ -34,26 +37,19 @@ def token_decode(token: str):
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
         return decoded_token
     except jwt.ExpiredSignatureError:
-        # Handle token expiration
         return None
     except jwt.DecodeError:
-        # Handle token decoding error
         return None
 
 
 def verify_reset_token(token: str):
     try:
-        print("i'm here")
-        print(token)
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
-        print(payload)
         user_id = int(payload.get("user_id"))
         return user_id
     except jwt.ExpiredSignatureError:
-        # Handle token expiration
         return None
     except jwt.DecodeError:
-        # Handle token decoding error
         return None
 
 
@@ -63,3 +59,24 @@ def verify_password(plain_password: str, hashed_password: str):
 
 def hash_password(plain_password: str):
     return password_context.hash(plain_password)
+
+
+def verify_refresh_token(token: str):
+    try:
+        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.AUTHENTICATION__ALGORITHM])
+        return decoded_token
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.DecodeError:
+        return False
+
+
+def create_refresh_token(data: dict, expire_minutes: int | None = None):
+    to_encode = data.copy()
+    if expire_minutes:
+        expire = datetime.utcnow() + timedelta(expire_minutes)
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=int(settings.REFRESH_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.AUTHENTICATION__ALGORITHM)
+    return encoded_jwt

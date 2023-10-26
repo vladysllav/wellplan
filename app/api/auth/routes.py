@@ -1,5 +1,5 @@
 import os
-from typing import Any
+from typing import Any, Annotated
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -7,8 +7,17 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app.api import deps
 from app.core.config import settings
-from app.core.security import create_token, hash_password, create_reset_token, verify_reset_token
+from app.core.security import (
+    create_token,
+    hash_password,
+    create_reset_token,
+    verify_reset_token,
+    apikey_scheme,
+    create_refresh_token,
+    verify_refresh_token,
+)
 from app.crud.user import crud_user
+from app.models import User
 from app.schemas.email import ResponseMessage
 from app.email import send_reset_password_email
 
@@ -72,11 +81,28 @@ def forgot_password(user_email: str = Body(...), db: Session = Depends(deps.get_
     return ResponseMessage(message=f"An email has been sent to {user_email} with a link to reset your password.")
 
 
+@router.post("/refresh", response_model=schemas.RefreshToken)
+async def refresh_token(token: str = Body(...), db: Session = Depends(deps.get_db),
+                        user: User = Depends(crud_user.get_current_user)):
+    decoded_token = verify_refresh_token(token)
+
+    if decoded_token is False:
+        raise HTTPException(status_code=400, detail="Invalid token")
+
+    if decoded_token is None:
+        new_access_token = create_token(data=decoded_token)
+        return {"access_token": new_access_token, "refresh_token": None}
+
+    new_refresh_token = create_refresh_token(data=decoded_token)
+    return {"refresh_token": new_refresh_token, "access_token": None}
+
+
 @router.post("/reset-password", response_model=ResponseMessage, status_code=200)
 def reset_password(
     reset_token: str = Body(...),
     new_password: str = Body(...),
     db: Session = Depends(deps.get_db),
+    user: User = Depends(crud_user.get_current_user),
 ):
     user_id = verify_reset_token(reset_token)
     if not user_id:
@@ -90,17 +116,6 @@ def reset_password(
     user.password = hashed_password
     db.commit()
     return ResponseMessage(message="Password reset successfully")
-
-
-@router.post("/refresh-token", response_model=schemas.Token, status_code=200)
-def refresh_token(token: str = Depends(deps.oauth2_scheme), db: Session = Depends(deps.get_db)) -> dict:
-    user = crud_user.get_current_user(db, token)
-
-    if not user:
-        raise HTTPException(status_code=400, detail="User not found")
-    access_token = create_token({"user_id": user.id}, settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-
-    return {"access_token": access_token, "refresh_token": token}
 
 
 # @router.put("/change-password", response_model=schemas.Message)
