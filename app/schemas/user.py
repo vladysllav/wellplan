@@ -17,6 +17,7 @@ class UserSignUp(BaseModel):
     email: EmailStr
     password: str
     date_of_birth: date
+    user_type: UserTypeEnum
 
 
 class UserCreate(BaseModel):

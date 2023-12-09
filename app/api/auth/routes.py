@@ -83,9 +83,8 @@ def forgot_password(user_email: str = Body(...), db: Session = Depends(deps.get_
 
 @router.post("/refresh", response_model=schemas.RefreshToken)
 async def refresh_token(token: str = Body(...), db: Session = Depends(deps.get_db),
-                        user: User = Depends(crud_user.get_current_user)):
+                        user: User = Depends(deps.get_current_user)):
     decoded_token = verify_refresh_token(token)
-
     if decoded_token is False:
         raise HTTPException(status_code=400, detail="Invalid token")
 
@@ -102,7 +101,7 @@ def reset_password(
     reset_token: str = Body(...),
     new_password: str = Body(...),
     db: Session = Depends(deps.get_db),
-    user: User = Depends(crud_user.get_current_user),
+    user: User = Depends(deps.get_current_user),
 ):
     user_id = verify_reset_token(reset_token)
     if not user_id:

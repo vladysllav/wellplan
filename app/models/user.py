@@ -18,7 +18,7 @@ class User(TimestampedModel, Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     is_active = Column(Boolean(), default=True)
-    user_type = Column(Enum(UserTypeEnum), nullable=False, default=UserTypeEnum.client)
+    user_type = Column(Enum(UserTypeEnum), nullable=False)  #default=UserTypeEnum.client
     date_of_birth = Column(Date(), nullable=False)
 
     @property
